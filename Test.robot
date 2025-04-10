@@ -34,13 +34,6 @@ Resolve Domain With DNS
     END
     RETURN    ${duration_ms}
 
-Resolve Domain With DNS 2
-    [Arguments]    ${domain}    ${dns_server}
-    ${code}=    Set Variable    import time; import dns.resolver; start = time.time(); r = dns.resolver.Resolver(); r.nameservers = ['${dns_server}']; r.resolve('${domain}'); end = time.time(); print(round((end - start) * 1000, 2))
-    ${result}=    Run Process    python3    -c    ${code}    shell=True    #stdout=TRUE
-    ${duration}=    Set Variable    ${result.stdout.strip()}
-    RETURN    ${duration}
-
 Flush DNS Cache
     Log To Console    message=\nFlushing DNS cache
     ${resolvers} =    Run Process    resolvectl flush-caches     shell=True    #stdout=TRUE
