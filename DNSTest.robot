@@ -13,6 +13,10 @@ ${TopTime}    10000
 ${TopServer}
 ${TopURL}
 
+${LeastTime}  1
+${LeastServer}
+${LeastURL}
+
 *** Test Cases ***
 Measure DNS Resolution Times
     ${url_text}=    Get File    ${URL_FILE}
@@ -32,13 +36,20 @@ Measure DNS Resolution Times
 
             ${duration} =    Evaluate    float(${duration})
             ${TopTime} =     Evaluate    float(${TopTime})
+            ${LeastTime} =     Evaluate    float(${LeastTime})
             IF  ${duration} >= 1 and ${duration} <= ${TopTime}
                 ${TopTime}=    Set Variable    ${duration}
                 ${TopServer}=    Set Variable    ${dns}
                 ${TopURL}=    Set Variable    ${url}
             END
+            IF  ${duration} >= 1 and ${duration} >= ${LeastTime}
+                ${LeastTime}=    Set Variable    ${duration}
+                ${LeastServer}=    Set Variable    ${dns}
+                ${LeastURL}=    Set Variable    ${url}
+            END
             Append To File    ${CSV_FILE}    ${dns},${url},${duration}\n
         END
     END
     Log    DNS measurements saved to ${CSV_FILE}
-    Log To Console    Top DNS server: ${TopServer} with URL: ${TopURL} took ${TopTime} ms
+    Log To Console    \nTop DNS server: ${TopServer} with URL: ${TopURL} took ${TopTime} ms
+    Log To Console    \nLeast DNS server: ${LeastServer} with URL: ${LeastURL} took ${LeastTime} ms
