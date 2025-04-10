@@ -31,7 +31,7 @@ Measure DNS Resolution Times
     FOR    ${dns}    IN    @{DNS_SERVERS}
         FOR    ${url}    IN    @{URLS}
             ${code}=    Set Variable    import time; import dns.resolver; start = time.time(); r = dns.resolver.Resolver(); r.nameservers = ['${dns}']; r.resolve('${url}'); end = time.time(); print(round((end - start) * 1000, 2))
-            ${result}=    Run Process    python3    -c    ${code}    shell=True    stdout=TRUE
+            ${result}=    Run Process    python3    -c    ${code}    shell=True
             ${duration}=    Set Variable    ${result.stdout.strip()}
 
             ${duration} =    Evaluate    float(${duration})
